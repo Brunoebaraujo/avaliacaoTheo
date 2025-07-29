@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avaliação de Escolas</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-storage-compat.js"></script>
+  <!-- Configuração Firebase -->
+  <script src="firebaseConfig.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Comparação de Escolas</h1>
+    <nav>
+      <a href="evaluate.html">Nova Avaliação</a>
+    </nav>
+  </header>
+  <main>
+    <section id="resultsSection">
+      <h2>Resultados Agregados</h2>
+      <p>Veja abaixo as pontuações médias para cada escola. As notas variam de 1 a 10 para cada critério.</p>
+      <!-- Botões para gerar relatórios -->
+      <div id="reportButtons" style="margin-bottom: 1rem;">
+        <button id="pdfReportBtn">Gerar relatório PDF (com fotos)</button>
+        <button id="excelReportBtn">Gerar Excel (somente notas)</button>
+      </div>
+      <div id="resultsContainer">
+        <!-- Conteúdo gerado dinamicamente -->
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>Aplicação de avaliação de escolas – desenvolvido para apoiar decisões informadas.</p>
+  </footer>
+  <!-- Dependências para geração de relatórios -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
