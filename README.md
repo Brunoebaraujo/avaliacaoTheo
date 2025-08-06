@@ -1,4 +1,4 @@
-# Aplicação de Avaliação de Escolas
+# Aplicação de Avaliação de Escolas Theo
 
 Esta aplicação web permite registrar notas e fotos de visitas a escolas e visualizar resultados agregados. Foi desenvolvida para funcionar com Firebase Firestore e Storage.
 
