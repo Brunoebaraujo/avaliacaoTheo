@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Avaliação</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Biblioteca para geração de PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Nova Avaliação de Escola</h1>
+    <nav>
+      <a href="index.html">Resultados</a>
+    </nav>
+  </header>
+  <main>
+    <form id="evaluationForm">
+      <fieldset>
+        <legend>Identificação</legend>
+        <label for="userName">Seu nome:</label>
+        <input type="text" id="userName" name="userName" required>
+        <label for="userEmail">Seu e-mail:</label>
+        <input type="email" id="userEmail" name="userEmail" required>
+        <label for="schoolName">Nome da escola:</label>
+        <input type="text" id="schoolName" name="schoolName" required placeholder="Ex.: Escola Alpha">
+      </fieldset>
+      <fieldset>
+        <legend>Pontuações e Fotos</legend>
+        <p>Para cada critério, atribua uma nota de 1 a 10 e faça upload de até 3 fotos (opcional).</p>
+        <div class="criterion" data-crit="professores">
+          <h3>Qualidade dos professores</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="professores_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="professores_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="professores_photos" multiple>
+          </label>
+        </div>
+
+        <div class="criterion" data-crit="alunos">
+          <h3>Alunos por sala</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="alunos_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="alunos_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="alunos_photos" multiple>
+          </label>
+        </div>
+        <div class="criterion" data-crit="metodo">
+          <h3>Método de ensino</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="metodo_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="metodo_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="metodo_photos" multiple>
+          </label>
+        </div>
+        <div class="criterion" data-crit="estrutura">
+          <h3>Estrutura física</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="estrutura_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="estrutura_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="estrutura_photos" multiple>
+          </label>
+        </div>
+        <div class="criterion" data-crit="limpeza">
+          <h3>Limpeza geral</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="limpeza_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="limpeza_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="limpeza_photos" multiple>
+          </label>
+        </div>
+
+        <div class="criterion" data-crit="convivencia">
+          <h3>Espaço de convivência</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="convivencia_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="convivencia_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="convivencia_photos" multiple>
+          </label>
+        </div>
+
+        <div class="criterion" data-crit="esportes">
+          <h3>Espaço para esportes</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="esportes_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="esportes_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="esportes_photos" multiple>
+          </label>
+        </div>
+        <div class="criterion" data-crit="atividades">
+          <h3>Atividades extracurriculares</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="atividades_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="atividades_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="atividades_photos" multiple>
+          </label>
+        </div>
+        <div class="criterion" data-crit="distancia">
+          <h3>Distância e acesso</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="distancia_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="distancia_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="distancia_photos" multiple>
+          </label>
+        </div>
+        <div class="criterion" data-crit="custos">
+          <h3>Custos e taxas</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="custos_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="custos_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="custos_photos" multiple>
+          </label>
+        </div>
+
+        <div class="criterion" data-crit="bolsas">
+          <h3>Programas de bolsas</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="bolsas_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="bolsas_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="bolsas_photos" multiple>
+          </label>
+        </div>
+
+        <div class="criterion" data-crit="materiais">
+          <h3>Valor do material didático</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="materiais_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="materiais_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="materiais_photos" multiple>
+          </label>
+        </div>
+
+        <div class="criterion" data-crit="cantina">
+          <h3>Cantina</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="cantina_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="cantina_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="cantina_photos" multiple>
+          </label>
+        </div>
+        <div class="criterion" data-crit="seguranca">
+          <h3>Segurança</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="seguranca_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="seguranca_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="seguranca_photos" multiple>
+          </label>
+        </div>
+        <div class="criterion" data-crit="reputacao">
+          <h3>Reputação</h3>
+          <label>Nota:
+            <input type="number" min="1" max="10" name="reputacao_score" required size="3" style="width:4rem;">
+          </label>
+          <label>Comentário:
+            <textarea name="reputacao_comment" rows="3" placeholder="Escreva suas observações"></textarea>
+          </label>
+          <label>Fotos (até 3):
+            <input type="file" accept="image/*" capture="environment" name="reputacao_photos" multiple>
+          </label>
+        </div>
+
+        <div class="criterion" data-crit="observacoes">
+          <h3>Observações gerais</h3>
+          <label>Comentário:
+            <textarea name="observacoes_comment" rows="4" placeholder="Escreva qualquer observação adicional sobre a escola"></textarea>
+          </label>
+        </div>
+      </fieldset>
+      <button type="submit">Enviar Avaliação</button>
+      <div id="statusMessage" class="status"></div>
+    </form>
+  </main>
+  <footer>
+    <p>Aplicação de avaliação de escolas – suas notas ajudam na decisão.</p>
+  </footer>
+  <script src="evaluate.js"></script>
+</body>
+</html>
