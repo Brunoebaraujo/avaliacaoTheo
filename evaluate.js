@@ -2,6 +2,25 @@
 // Este script coleta as informações da avaliação, incluindo notas, comentários e fotos,
 // gera um relatório PDF com as fotos e um arquivo CSV com apenas as notas/comentários.
 
+// Mapeamento de rótulos para cada critério (usado no PDF e no gráfico)
+const LABELS = {
+  professores: 'Qualidade dos professores',
+  alunos: 'Alunos por sala',
+  metodo: 'Método de ensino',
+  estrutura: 'Estrutura física',
+  limpeza: 'Limpeza geral',
+  convivencia: 'Espaço de convivência',
+  esportes: 'Espaço para esportes',
+  atividades: 'Atividades extracurriculares',
+  distancia: 'Distância e acesso',
+  seguranca: 'Segurança',
+  custos: 'Custos e taxas',
+  bolsas: 'Programas de bolsas',
+  materiais: 'Valor do material didático',
+  cantina: 'Cantina',
+  reputacao: 'Reputação'
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('evaluationForm');
   const statusMessage = document.getElementById('statusMessage');
@@ -20,13 +39,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lista de critérios e rótulos
     const criteria = {
       professores: 'Qualidade dos professores',
+      alunos: 'Alunos por sala',
       metodo: 'Método de ensino',
       estrutura: 'Estrutura física',
       limpeza: 'Limpeza geral',
+      convivencia: 'Espaço de convivência',
+      esportes: 'Espaço para esportes',
       atividades: 'Atividades extracurriculares',
       distancia: 'Distância e acesso',
-      custos: 'Custos e taxas',
       seguranca: 'Segurança',
+      custos: 'Custos e taxas',
+      bolsas: 'Programas de bolsas',
+      materiais: 'Valor do material didático',
+      cantina: 'Cantina',
       reputacao: 'Reputação'
     };
     const scores = {};
@@ -60,6 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       photosData[crit] = images;
     }
+    // Observações gerais
+    const observacoes = form.elements['observacoes_comment'].value.trim();
     // Monta objeto de avaliação
     const evaluation = {
       userName,
@@ -68,18 +95,18 @@ document.addEventListener('DOMContentLoaded', () => {
       timestamp: new Date().toLocaleString(),
       scores,
       comments,
-      photos: photosData
+      photos: photosData,
+      observacoes
     };
     try {
       await generatePdfReport(evaluation);
-      generateCsvReport(evaluation);
       statusMessage.style.color = 'green';
-      statusMessage.textContent = 'Relatórios gerados com sucesso! Verifique seus downloads.';
+      statusMessage.textContent = 'Relatório gerado com sucesso! Verifique seu download.';
       form.reset();
     } catch (err) {
-      console.error('Erro ao gerar relatórios:', err);
+      console.error('Erro ao gerar relatório:', err);
       statusMessage.style.color = 'red';
-      statusMessage.textContent = 'Erro ao gerar relatórios: ' + err.message;
+      statusMessage.textContent = 'Erro ao gerar relatório: ' + err.message;
     }
   });
 });
@@ -140,12 +167,13 @@ async function generatePdfReport(evaluation) {
   doc.setFontSize(11);
   for (const crit in evaluation.scores) {
     const critName = crit;
+    const label = LABELS[critName] || critName;
     const score = evaluation.scores[crit];
     const comment = evaluation.comments[crit];
     const photos = evaluation.photos[crit] || [];
     // Título do critério
     doc.setFont(undefined, 'bold');
-    doc.text(`${critName.toUpperCase()}`, margin, y);
+    doc.text(`${label}`, margin, y);
     doc.setFont(undefined, 'normal');
     y += 14;
     doc.text(`Nota: ${score}`, margin + 10, y);
@@ -179,6 +207,23 @@ async function generatePdfReport(evaluation) {
       doc.addPage();
       y = margin;
     }
+  }
+
+  // Observações gerais
+  if (evaluation.observacoes && evaluation.observacoes.trim().length > 0) {
+    if (y > doc.internal.pageSize.getHeight() - margin * 2) {
+      doc.addPage();
+      y = margin;
+    }
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(12);
+    doc.text('Observações gerais', margin, y);
+    y += 14;
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(10);
+    const obsLines = doc.splitTextToSize(evaluation.observacoes, doc.internal.pageSize.getWidth() - 2 * margin);
+    doc.text(obsLines, margin, y);
+    y += obsLines.length * 12;
   }
   // Desenha gráfico de barras comparativo (nota vs referência 6)
   try {
@@ -245,7 +290,7 @@ async function generatePdfReport(evaluation) {
     const barHeight = 12;
     const barGap = 14;
     // Percorre cada critério na ordem predefinida
-    const order = ['professores','metodo','estrutura','limpeza','atividades','distancia','custos','seguranca','reputacao'];
+    const order = ['professores','alunos','metodo','estrutura','limpeza','convivencia','esportes','atividades','distancia','seguranca','custos','bolsas','materiais','cantina','reputacao'];
     order.forEach((key, index) => {
       const score = evaluation.scores[key];
       const baseRef = 6;
@@ -261,12 +306,68 @@ async function generatePdfReport(evaluation) {
       // Label do critério
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(10);
-      const critLabel = key.charAt(0).toUpperCase() + key.slice(1);
+      const critLabel = LABELS[key] || key;
       doc.text(critLabel, chartX + chartWidth + 8, yPos + barHeight - 2);
     });
     y = chartYStart + order.length * (barHeight + barGap) + 10;
   } catch (err) {
     console.warn('Erro ao desenhar gráfico de barras:', err);
+  }
+
+  // Adiciona linha CSV no final do PDF para fácil cópia em planilha
+  try {
+    // Prepara cabeçalhos e linha de valores na mesma ordem do CSV original
+    const headers = [
+      'Escola','Avaliador','E-mail','Data',
+      'Professores','Comentário Professores',
+      'Alunos por sala','Comentário Alunos por sala',
+      'Método','Comentário Método',
+      'Estrutura','Comentário Estrutura',
+      'Limpeza','Comentário Limpeza',
+      'Espaço de convivência','Comentário Espaço de convivência',
+      'Espaço para esportes','Comentário Espaço para esportes',
+      'Atividades','Comentário Atividades',
+      'Distância','Comentário Distância',
+      'Segurança','Comentário Segurança',
+      'Custos','Comentário Custos',
+      'Programas de bolsas','Comentário Programas de bolsas',
+      'Valor do material didático','Comentário Valor do material didático',
+      'Cantina','Comentário Cantina',
+      'Reputação','Comentário Reputação'
+    ];
+    const values = [];
+    values.push(evaluation.school);
+    values.push(evaluation.userName);
+    values.push(evaluation.userEmail);
+    values.push(evaluation.timestamp);
+    const orderKeys = ['professores','alunos','metodo','estrutura','limpeza','convivencia','esportes','atividades','distancia','seguranca','custos','bolsas','materiais','cantina','reputacao'];
+    orderKeys.forEach(key => {
+      values.push(evaluation.scores[key]);
+      values.push(evaluation.comments[key] || '');
+    });
+    const csvLine = values.map(v => {
+      if (v === null || v === undefined) return '';
+      const s = String(v).replace(/"/g, '""');
+      // Envolvemos com aspas duplas para preservar vírgulas internas
+      return '"' + s + '"';
+    }).join(',');
+    // Se necessário, adiciona nova página
+    if (y > doc.internal.pageSize.getHeight() - margin * 4) {
+      doc.addPage();
+      y = margin;
+    }
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(12);
+    doc.text('Linha para planilha (copie e cole no Excel)', margin, y);
+    y += 14;
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(8);
+    // Quebra a linha CSV em múltiplas linhas para caber na página
+    const csvWrapped = doc.splitTextToSize(csvLine, doc.internal.pageSize.getWidth() - margin * 2);
+    doc.text(csvWrapped, margin, y);
+    y += csvWrapped.length * 10;
+  } catch (err) {
+    console.warn('Erro ao adicionar linha CSV no PDF:', err);
   }
 
   // Salva o PDF
