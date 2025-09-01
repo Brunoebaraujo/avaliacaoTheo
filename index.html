@@ -1,71 +1,186 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Avaliação de Escolas</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>Avaliação de Escolas</h1>
-      <form id="evaluationForm">
-        <label for="schoolName">Nome da Escola:</label>
-        <input type="text" id="schoolName" name="schoolName" required /><br /><br />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avaliação de Escolas - Theo 2026</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4faff;
+      margin: 0;
+      padding: 0;
+    }
 
-        <div id="criteriaContainer"></div>
+    header {
+      background-color: #0074cc;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
 
-        <label for="observations">Observações Finais:</label>
-        <textarea id="observations" name="observations" rows="6" style="width: 100%;"></textarea><br /><br />
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
 
-        <button type="submit">Gerar Relatório</button>
-      </form>
-      <div id="status"></div>
+    form {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .criterion {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      color: #004b91;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"], input[type="number"], textarea, input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    input[type="file"] {
+      padding: 4px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    button {
+      background-color: #0074cc;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto 0;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Formulário de Avaliação de Escolas - Theo 2026</h1>
+  </header>
+
+  <form id="evaluationForm">
+    <div class="criterion">
+      <label for="schoolName">Nome da Escola</label>
+      <input type="text" id="schoolName" name="schoolName" required>
     </div>
 
-    <script>
-      const criteria = [
-        "Proposta pedagógica",
-        "Infraestrutura",
-        "Limpeza geral",
-        "Período de aula",
-        "Alunos por sala",
-        "Espaço de convivência",
-        "Espaço para esportes",
-        "Programas de bolsas",
-        "Cantina",
-        "Valor material didático",
-        "Segurança",
-        "Localização",
-        "Atendimento",
-        "Tecnologia",
-        "Valores e princípios",
-        "Atividades extracurriculares",
-        "Reputação"
-      ];
+    <div class="criterion">
+      <label for="periodo">Período de Aula (pontue o que for mais adequado)</label>
+      <input type="number" id="periodo" name="periodo">
+      <textarea name="comentario_periodo" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_periodo" accept="image/*" capture="environment" multiple>
+    </div>
 
-      const container = document.getElementById("criteriaContainer");
+    <div class="criterion">
+      <label for="infra">Infraestrutura</label>
+      <input type="number" id="infra" name="infra">
+      <textarea name="comentario_infra" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_infra" accept="image/*" capture="environment" multiple>
+    </div>
 
-      criteria.forEach((criterion) => {
-        const slug = criterion.replace(/\s+/g, '_').toLowerCase();
-        const block = document.createElement("div");
-        block.classList.add("criterion-block");
-        block.innerHTML = `
-          <h3>${criterion}</h3>
-          <label>Nota (0-10):</label>
-          <input type="number" name="score-${slug}" min="0" max="10" step="0.1" style="width: 60px;" required />
-          <br />
-          <label>Comentário:</label><br />
-          <textarea name="comment-${slug}" rows="3" style="width: 100%;"></textarea>
-          <br />
-          <label>Fotos:</label>
-          <input type="file" name="photos-${slug}" accept="image/*" multiple capture="environment" />
-          <hr />
-        `;
-        container.appendChild(block);
-      });
-    </script>
+    <div class="criterion">
+      <label for="limpeza">Limpeza Geral</label>
+      <input type="number" id="limpeza" name="limpeza">
+      <textarea name="comentario_limpeza" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_limpeza" accept="image/*" capture="environment" multiple>
+    </div>
 
-    <script src="generateReport.js"></script>
-  </body>
+    <div class="criterion">
+      <label for="convivencia">Espaço de Convivência</label>
+      <input type="number" id="convivencia" name="convivencia">
+      <textarea name="comentario_convivencia" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_convivencia" accept="image/*" capture="environment" multiple>
+    </div>
+
+    <div class="criterion">
+      <label for="esportes">Espaço para Esportes</label>
+      <input type="number" id="esportes" name="esportes">
+      <textarea name="comentario_esportes" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_esportes" accept="image/*" capture="environment" multiple>
+    </div>
+
+    <div class="criterion">
+      <label for="bolsas">Programas de Bolsas</label>
+      <input type="number" id="bolsas" name="bolsas">
+      <textarea name="comentario_bolsas" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_bolsas" accept="image/*" capture="environment" multiple>
+    </div>
+
+    <div class="criterion">
+      <label for="material">Valor do Material Didático</label>
+      <input type="number" id="material" name="material">
+      <textarea name="comentario_material" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_material" accept="image/*" capture="environment" multiple>
+    </div>
+
+    <div class="criterion">
+      <label for="alunos">Alunos por Sala</label>
+      <input type="number" id="alunos" name="alunos">
+      <textarea name="comentario_alunos" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_alunos" accept="image/*" capture="environment" multiple>
+    </div>
+
+    <div class="criterion">
+      <label for="seguranca">Segurança</label>
+      <input type="number" id="seguranca" name="seguranca">
+      <textarea name="comentario_seguranca" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_seguranca" accept="image/*" capture="environment" multiple>
+    </div>
+
+    <div class="criterion">
+      <label for="localizacao">Localização</label>
+      <input type="number" id="localizacao" name="localizacao">
+      <textarea name="comentario_localizacao" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_localizacao" accept="image/*" capture="environment" multiple>
+    </div>
+
+    <div class="criterion">
+      <label for="proposta">Proposta Pedagógica</label>
+      <input type="number" id="proposta" name="proposta">
+      <textarea name="comentario_proposta" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_proposta" accept="image/*" capture="environment" multiple>
+    </div>
+
+    <div class="criterion">
+      <label for="reputacao">Reputação</label>
+      <input type="number" id="reputacao" name="reputacao">
+      <textarea name="comentario_reputacao" placeholder="Comentários..."></textarea>
+      <input type="file" name="foto_reputacao" accept="image/*" capture="environment" multiple>
+    </div>
+
+    <div class="criterion">
+      <label for="observacoes">Observações Finais</label>
+      <textarea name="observacoes" placeholder="Anote aqui o que mais chamou atenção..."></textarea>
+    </div>
+
+    <button type="submit">Gerar Relatório</button>
+  </form>
+
+  <script src="generateReport.js"></script>
+</body>
 </html>
