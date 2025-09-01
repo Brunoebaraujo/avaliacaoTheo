@@ -63,7 +63,7 @@
     }
     hr {
       border: none;
-      border-top: 1px solid #ccc;
+      border-top: 1px solid black;
       margin: 15px 0;
     }
   </style>
@@ -122,7 +122,7 @@
         <label>Comentário:</label>
         <textarea name="comentario_${index}" rows="3"></textarea>
         <label>Fotos:</label>
-        <input type="file" name="foto_${index}" accept="image/*" multiple capture />
+        <input type="file" name="foto_${index}" accept="image/*" multiple capture="environment" />
       `;
       container.appendChild(sec);
     });
@@ -192,7 +192,7 @@
         }
 
         csvLine.push(nota);
-        doc.setDrawColor(200);
+        doc.setDrawColor(0);
         doc.line(10, y, 200, y);
         y += 5;
       }
