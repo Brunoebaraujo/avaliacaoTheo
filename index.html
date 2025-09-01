@@ -64,6 +64,11 @@
 
   <form id="evaluationForm">
     <section>
+      <label for="evaluatorName">Nome do Avaliador:</label>
+      <input type="text" id="evaluatorName" name="evaluatorName" required />
+    </section>
+
+    <section>
       <label for="schoolName">Nome da Escola:</label>
       <input type="text" id="schoolName" name="schoolName" required />
     </section>
@@ -85,7 +90,6 @@
       "Infraestrutura",
       "Limpeza Geral",
       "Material Didático",
-      "Corpo Docente",
       "Período de Aula",
       "Alunos por Sala",
       "Espaço de Convivência",
@@ -111,7 +115,7 @@
         <label>Comentário:</label>
         <textarea name="comentario_${index}" rows="3"></textarea>
         <label>Fotos:</label>
-        <input type="file" name="foto_${index}" accept="image/*" multiple capture="environment" />
+        <input type="file" name="foto_${index}" accept="image/*" multiple capture />
       `;
       container.appendChild(sec);
     });
@@ -123,9 +127,14 @@
 
       const form = document.getElementById("evaluationForm");
       const data = new FormData(form);
+      const avaliador = data.get("evaluatorName");
       const escola = data.get("schoolName");
+
       doc.setFontSize(16);
       doc.text(`Relatório de Avaliação - ${escola}`, 20, y);
+      y += 8;
+      doc.setFontSize(12);
+      doc.text(`Avaliador: ${avaliador}`, 20, y);
       y += 10;
 
       let csvLine = [escola];
