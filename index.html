@@ -55,6 +55,17 @@
     button:hover {
       background-color: #0055aa;
     }
+    .photo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 15px 0;
+    }
   </style>
 </head>
 <body>
@@ -151,23 +162,39 @@
           y += lines.length * 5;
         }
 
-        for (let j = 0; j < fotos.length; j++) {
-          const file = fotos[j];
-          const img = await fileToImage(file);
-          const ratio = img.width / img.height;
-          const w = 60;
-          const h = w / ratio;
+        if (fotos.length > 0) {
+          let x = 20;
+          let rowHeight = 0;
+          doc.setFontSize(10);
+          for (let j = 0; j < fotos.length; j++) {
+            const file = fotos[j];
+            const img = await fileToImage(file);
+            const ratio = img.width / img.height;
+            const w = 50;
+            const h = w / ratio;
 
-          if (y + h > 280) {
-            doc.addPage();
-            y = 20;
+            if (x + w > 190) {
+              x = 20;
+              y += rowHeight + 5;
+              rowHeight = 0;
+            }
+
+            if (y + h > 280) {
+              doc.addPage();
+              y = 20;
+            }
+
+            doc.addImage(img, "JPEG", x, y, w, h);
+            x += w + 5;
+            rowHeight = Math.max(rowHeight, h);
           }
-
-          doc.addImage(img, "JPEG", 20, y, w, h);
-          y += h + 5;
+          y += rowHeight + 5;
         }
 
         csvLine.push(nota);
+        doc.setDrawColor(200);
+        doc.line(10, y, 200, y);
+        y += 5;
       }
 
       const obs = data.get("observacoes");
