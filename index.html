@@ -1,186 +1,199 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Avaliação de Escolas - Theo 2026</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avaliação de Escolas</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f4faff;
+      color: #003366;
       margin: 0;
-      padding: 0;
+      padding: 20px;
     }
-
     header {
-      background-color: #0074cc;
+      background-color: #003366;
       color: white;
       padding: 20px;
       text-align: center;
+      font-size: 1.8em;
+      font-weight: bold;
     }
-
-    h1 {
-      margin: 0;
-      font-size: 28px;
+    section {
+      margin-top: 20px;
+      border: 1px solid #d0e0f0;
+      border-radius: 8px;
+      padding: 15px;
+      background: #ffffff;
     }
-
-    form {
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .criterion {
-      margin-bottom: 25px;
-    }
-
     label {
       display: block;
+      margin-top: 10px;
       font-weight: bold;
-      color: #004b91;
-      margin-bottom: 5px;
     }
-
-    input[type="text"], input[type="number"], textarea, input[type="file"] {
+    input[type="text"], textarea, input[type="file"] {
       width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
+      padding: 5px;
       border-radius: 5px;
-      font-size: 14px;
+      border: 1px solid #ccc;
     }
-
-    input[type="file"] {
-      padding: 4px;
+    .small-input {
+      width: 80px;
     }
-
-    textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
-
     button {
-      background-color: #0074cc;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #003366;
       color: white;
       border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 6px;
+      border-radius: 5px;
+      font-size: 1em;
       cursor: pointer;
-      display: block;
-      margin: 20px auto 0;
     }
-
     button:hover {
-      background-color: #005fa3;
+      background-color: #0055aa;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Formulário de Avaliação de Escolas - Theo 2026</h1>
+    Avaliação de Escolas para o Theo - 2026
   </header>
 
   <form id="evaluationForm">
-    <div class="criterion">
-      <label for="schoolName">Nome da Escola</label>
-      <input type="text" id="schoolName" name="schoolName" required>
-    </div>
+    <section>
+      <label for="schoolName">Nome da Escola:</label>
+      <input type="text" id="schoolName" name="schoolName" required />
+    </section>
 
-    <div class="criterion">
-      <label for="periodo">Horário de Aula</label>
-      <input type="number" id="periodo" name="periodo">
-      <textarea name="comentario_periodo" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_periodo" accept="image/*" capture="environment" multiple>
-    </div>
+    <section id="criteriaContainer"></section>
 
-    <div class="criterion">
-      <label for="infra">Infraestrutura</label>
-      <input type="number" id="infra" name="infra">
-      <textarea name="comentario_infra" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_infra" accept="image/*" capture="environment" multiple>
-    </div>
+    <section>
+      <label for="observacoes">Observações Finais:</label>
+      <textarea id="observacoes" name="observacoes" rows="4"></textarea>
+    </section>
 
-    <div class="criterion">
-      <label for="limpeza">Limpeza Geral</label>
-      <input type="number" id="limpeza" name="limpeza">
-      <textarea name="comentario_limpeza" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_limpeza" accept="image/*" capture="environment" multiple>
-    </div>
-
-    <div class="criterion">
-      <label for="convivencia">Espaço de Convivência</label>
-      <input type="number" id="convivencia" name="convivencia">
-      <textarea name="comentario_convivencia" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_convivencia" accept="image/*" capture="environment" multiple>
-    </div>
-
-    <div class="criterion">
-      <label for="esportes">Espaço para Esportes</label>
-      <input type="number" id="esportes" name="esportes">
-      <textarea name="comentario_esportes" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_esportes" accept="image/*" capture="environment" multiple>
-    </div>
-
-    <div class="criterion">
-      <label for="bolsas">Programas de Bolsas</label>
-      <input type="number" id="bolsas" name="bolsas">
-      <textarea name="comentario_bolsas" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_bolsas" accept="image/*" capture="environment" multiple>
-    </div>
-
-    <div class="criterion">
-      <label for="material">Valor do Material Didático</label>
-      <input type="number" id="material" name="material">
-      <textarea name="comentario_material" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_material" accept="image/*" capture="environment" multiple>
-    </div>
-
-    <div class="criterion">
-      <label for="alunos">Alunos por Sala</label>
-      <input type="number" id="alunos" name="alunos">
-      <textarea name="comentario_alunos" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_alunos" accept="image/*" capture="environment" multiple>
-    </div>
-
-    <div class="criterion">
-      <label for="seguranca">Segurança</label>
-      <input type="number" id="seguranca" name="seguranca">
-      <textarea name="comentario_seguranca" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_seguranca" accept="image/*" capture="environment" multiple>
-    </div>
-
-    <div class="criterion">
-      <label for="localizacao">Localização</label>
-      <input type="number" id="localizacao" name="localizacao">
-      <textarea name="comentario_localizacao" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_localizacao" accept="image/*" capture="environment" multiple>
-    </div>
-
-    <div class="criterion">
-      <label for="proposta">Proposta Pedagógica</label>
-      <input type="number" id="proposta" name="proposta">
-      <textarea name="comentario_proposta" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_proposta" accept="image/*" capture="environment" multiple>
-    </div>
-
-    <div class="criterion">
-      <label for="reputacao">Reputação</label>
-      <input type="number" id="reputacao" name="reputacao">
-      <textarea name="comentario_reputacao" placeholder="Comentários..."></textarea>
-      <input type="file" name="foto_reputacao" accept="image/*" capture="environment" multiple>
-    </div>
-
-    <div class="criterion">
-      <label for="observacoes">Observações Finais</label>
-      <textarea name="observacoes" placeholder="Anote aqui o que mais chamou atenção..."></textarea>
-    </div>
-
-    <button type="submit">Gerar Relatório</button>
+    <button type="button" onclick="generatePDF()">Gerar Relatório</button>
   </form>
 
-  <script src="generateReport.js"></script>
+  <script>
+    const criterios = [
+      "Localização",
+      "Segurança",
+      "Infraestrutura",
+      "Limpeza Geral",
+      "Material Didático",
+      "Corpo Docente",
+      "Período de Aula",
+      "Alunos por Sala",
+      "Espaço de Convivência",
+      "Espaço para Esportes",
+      "Programas de Bolsas",
+      "Cantina",
+      "Valor Material Didático",
+      "Projeto Pedagógico",
+      "Disciplinas Extras",
+      "Tecnologia e Inovação",
+      "Atendimento da Equipe",
+      "Reputação"
+    ];
+
+    const container = document.getElementById("criteriaContainer");
+
+    criterios.forEach((criterio, index) => {
+      const sec = document.createElement("section");
+      sec.innerHTML = `
+        <h3>${criterio}</h3>
+        <label>Nota (0 a 10):</label>
+        <input type="number" class="small-input" name="nota_${index}" min="0" max="10" step="0.1" required />
+        <label>Comentário:</label>
+        <textarea name="comentario_${index}" rows="3"></textarea>
+        <label>Fotos:</label>
+        <input type="file" name="foto_${index}" accept="image/*" multiple capture="environment" />
+      `;
+      container.appendChild(sec);
+    });
+
+    async function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      let y = 20;
+
+      const form = document.getElementById("evaluationForm");
+      const data = new FormData(form);
+      const escola = data.get("schoolName");
+      doc.setFontSize(16);
+      doc.text(`Relatório de Avaliação - ${escola}`, 20, y);
+      y += 10;
+
+      let csvLine = [escola];
+
+      for (let i = 0; i < criterios.length; i++) {
+        const nota = data.get(`nota_${i}`);
+        const comentario = data.get(`comentario_${i}`);
+        const fotos = form.querySelector(`input[name='foto_${i}']`).files;
+
+        doc.setFontSize(12);
+        doc.text(`${criterios[i]}: Nota ${nota}`, 20, y);
+        y += 6;
+
+        if (comentario) {
+          doc.setFontSize(10);
+          const lines = doc.splitTextToSize(`Comentário: ${comentario}`, 170);
+          doc.text(lines, 20, y);
+          y += lines.length * 5;
+        }
+
+        for (let j = 0; j < fotos.length; j++) {
+          const file = fotos[j];
+          const img = await fileToImage(file);
+          const ratio = img.width / img.height;
+          const w = 60;
+          const h = w / ratio;
+
+          if (y + h > 280) {
+            doc.addPage();
+            y = 20;
+          }
+
+          doc.addImage(img, "JPEG", 20, y, w, h);
+          y += h + 5;
+        }
+
+        csvLine.push(nota);
+      }
+
+      const obs = data.get("observacoes");
+      if (obs) {
+        doc.addPage();
+        doc.setFontSize(12);
+        doc.text("Observações Finais:", 20, 20);
+        const obsLines = doc.splitTextToSize(obs, 170);
+        doc.text(obsLines, 20, 30);
+      }
+
+      doc.addPage();
+      doc.setFontSize(10);
+      doc.text("CSV para Comparação:", 20, 20);
+      doc.setFont("Courier");
+      doc.text(csvLine.join(","), 20, 30);
+
+      doc.save(`Relatorio_${escola.replace(/\s+/g, "_")}_${Date.now()}.pdf`);
+    }
+
+    function fileToImage(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  </script>
 </body>
 </html>
